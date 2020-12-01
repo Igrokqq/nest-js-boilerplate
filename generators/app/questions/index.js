@@ -1,5 +1,6 @@
 const packageManager = require('./packageManager');
 const app = require('./app');
+const wantedAuth = require('./wantAuth');
 const authType = require('./authType');
 const additionalAuthQuestions = require('./additionalAuthQuestions');
 const identifier = require('./identifier');
@@ -11,6 +12,7 @@ const deploy = require('./deploy');
 module.exports = {
   packageManager,
   app,
+  wantedAuth,
   auth: {
     type: authType,
     additionalQuestions: additionalAuthQuestions,

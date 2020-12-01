@@ -1,4 +1,4 @@
-const path = require('path');
+const { join } = require('path');
 const fs = require('fs');
 
 module.exports = function() {
@@ -6,83 +6,99 @@ module.exports = function() {
   const payload = {
     config: answers,
   };
+  const buildDir = answers.identifier;
 
   if (fs.existsSync('./src')) {
     this.fs.copyTpl(
-      this.templatePath(path.join('./src')),
-      this.destinationPath(`${this.answers.identifier}/src`),
+      this.templatePath(join('./src')),
+      this.destinationPath(`${buildDir}/src`),
       payload,
     );
   }
 
   this.fs.copyTpl(
-    this.templatePath(path.join('./index.js')),
-    this.destinationPath(`${this.answers.identifier}/index.js`),
+    this.templatePath(join('./index.js')),
+    this.destinationPath(`${buildDir}/index.js`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./nest-cli.json')),
-    this.destinationPath(`${this.answers.identifier}/nest-cli.json`),
+    this.templatePath(join('./nest-cli.json')),
+    this.destinationPath(`${buildDir}/nest-cli.json`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./package.json')),
-    this.destinationPath(`${this.answers.identifier}/package.json`),
+    this.templatePath(join('./package.json')),
+    this.destinationPath(`${buildDir}/package.json`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./package-lock.json')),
-    this.destinationPath(`${this.answers.identifier}/package-lock.json`),
+    this.templatePath(join('./package-lock.json')),
+    this.destinationPath(`${buildDir}/package-lock.json`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./README.md')),
-    this.destinationPath(`${this.answers.identifier}/README.md`),
+    this.templatePath(join('./README.md')),
+    this.destinationPath(`${buildDir}/README.md`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./tsconfig.build.json')),
-    this.destinationPath(`${this.answers.identifier}/tsconfig.build.json`),
+    this.templatePath(join('./tsconfig.build.json')),
+    this.destinationPath(`${buildDir}/tsconfig.build.json`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./tsconfig.json')),
-    this.destinationPath(`${this.answers.identifier}/tsconfig.json`),
+    this.templatePath(join('./tsconfig.json')),
+    this.destinationPath(`${buildDir}/tsconfig.json`),
     payload,
   );
 
   // files with "_" prefix
   this.fs.copyTpl(
-    this.templatePath(path.join('./_.editorconfig')),
-    this.destinationPath(`${this.answers.identifier}/.editorconfig`),
+    this.templatePath(join('./_.editorconfig')),
+    this.destinationPath(`${buildDir}/.editorconfig`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./_.env.example')),
-    this.destinationPath(`${this.answers.identifier}/.env.example`),
+    this.templatePath(join('./_.env.example')),
+    this.destinationPath(`${buildDir}/.env.example`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./_.eslintrc.json')),
-    this.destinationPath(`${this.answers.identifier}/.eslintrc.json`),
+    this.templatePath(join('./_.eslintrc.json')),
+    this.destinationPath(`${buildDir}/.eslintrc.json`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./_.gitignore')),
-    this.destinationPath(`${this.answers.identifier}/.gitignore`),
+    this.templatePath(join('./_.gitignore')),
+    this.destinationPath(`${buildDir}/.gitignore`),
     payload,
   );
   this.fs.copyTpl(
-    this.templatePath(path.join('./_.prettierrc')),
-    this.destinationPath(`${this.answers.identifier}/.prettierrc`),
+    this.templatePath(join('./_.prettierrc')),
+    this.destinationPath(`${buildDir}/.prettierrc`),
     payload,
   );
 
   if (answers['deploy:heroku'] === 'Yes') {
     this.fs.copyTpl(
-      this.templatePath(path.join('./deploy-heroku.sh')),
-      this.destinationPath(`${this.answers.identifier}/deploy-heroku.sh`),
+      this.templatePath(join('./deploy-heroku.sh')),
+      this.destinationPath(`${buildDir}/deploy-heroku.sh`),
       payload,
+    );
+  }
+
+  // if auth is not needed then build a default project without auth.
+  if (answers.wantedAuth.toLowerCase() === 'no') {
+    this.fs.copyTpl(
+      this.templatePath(join(`./${answers.db}/src`)),
+      this.destinationPath(`${buildDir}/src`)
+    );
+  }
+
+  if (answers.wantedDocker.toLowerCase() === 'yes') {
+    this.fs.copyTpl(
+      this.templatePath(join('./mongodb/docker-compose.yml')),
+      this.destinationPath(`${buildDir}/docker-compose.yml`)
     );
   }
 };

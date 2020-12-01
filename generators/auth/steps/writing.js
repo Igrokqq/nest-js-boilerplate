@@ -2,11 +2,13 @@ const fs = require('fs');
 const { join } = require('path');
 
 module.exports = function() {
-  const { answers } = this.options;
+  const { answers } = { ...this.options, ...this.answers };
+
+  const db = answers.db.toLowerCase();
 
   const authFolder = answers.sessionsStorage
-    ? `${answers.db.toLowerCase()}/${answers.authType}/${answers.sessionsStorage}`
-    : `${answers.db.toLowerCase()}/${answers.authType}`;
+    ? `${db}/${answers.authType}/${answers.sessionsStorage}`
+    : `${db}/${answers.authType}`;
 
   if (!authFolder) {
     throw new Error('The auth folder is not existing');
@@ -95,7 +97,7 @@ module.exports = function() {
       payload,
     );
   }
-  
+
   // DOCKER
   if (answers.wantedDocker.toLowerCase() === 'yes') {
     this.fs.copyTpl(

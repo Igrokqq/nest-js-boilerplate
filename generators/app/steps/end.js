@@ -6,9 +6,11 @@ const chalk = require('chalk');
 const printMessage = require('print-message');
 
 module.exports = function() {
-  this.composeWith('nest-js-boilerplate:auth', {
-    answers: this.answers,
-  });
+  if (this.answers.wantAuth) {
+    this.composeWith('nest-js-boilerplate:auth', {
+      answers: this.answers,
+    });
+  }
 
   printMessage(
     [

@@ -28,17 +28,8 @@ module.exports = {
     askQuestions.call(this, 'Application', questions.app, this.async());
   },
 
-  askAuthType() {
-    askQuestions.call(this, 'Auth', questions.auth.type, this.async());
-  },
-
-  askAdditionalAuthQuestions() {
-    askQuestions.call(
-      this,
-      'Auth additional questions',
-      questions.auth.additionalQuestions[this.answers.authType],
-      this.async(),
-    );
+  askIsAuthNeed() {
+    askQuestions.call(this, 'Need auth', questions.wantedAuth, this.async());
   },
 
   askAboutDatabase() {
